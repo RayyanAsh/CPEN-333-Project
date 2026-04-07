@@ -164,6 +164,9 @@ class Game():
         """
         NewSnakeCoordinates = self.calculateNewCoordinates()
 
+        # Check to see if any of the game termination conditions have occurred
+        self.isGameOver(NewSnakeCoordinates)
+
         #Checks whether the prey has been caught or not
         if ((self.preyX,self.preyY) == NewSnakeCoordinates):
 
@@ -171,7 +174,7 @@ class Game():
             self.score += 1
             self.snakeCoordinates.append(NewSnakeCoordinates)
             
-            # Pushing the score to quqe and creating new prey
+            # Pushing the score to queue and creating new prey
             self.queue.put({"score":self.score})
             self.createNewPrey()
 
@@ -180,8 +183,7 @@ class Game():
             self.snakeCoordinates.append(NewSnakeCoordinates)
             self.snakeCoordinates.pop(0)
         
-        # Check to see if any of the game termination conditions have occurred
-        self.isGameOver(NewSnakeCoordinates)
+        
 
         # Push the move to the stack
         self.queue.put({"move":self.snakeCoordinates})
