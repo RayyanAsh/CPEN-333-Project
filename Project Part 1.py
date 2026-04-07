@@ -126,8 +126,8 @@ class Game():
         """
         SPEED = 0.15     #speed of snake updates (sec)
         while self.gameNotOver:
-            #complete the method implementation below
-            pass #remove this line from your implementation
+            pass
+            
 
     def whenAnArrowKeyIsPressed(self, e) -> None:
         """ 
@@ -172,8 +172,23 @@ class Game():
             head of the snake.
             It is used by the move() method.    
         """
-        lastX, lastY = self.snakeCoordinates[-1]
-        #complete the method implementation below
+        lastX, lastY = self.snakeCoordinates[-1]        
+
+        # Condtional statements change values of X and Y coordinates based on the direction of movement
+        # X is positive to the right, and Y is postive downwards
+
+        if (self.direction == "Left"):
+            lastX -= 10
+        elif (self.direction == "Right"):
+            lastX += 10
+        elif(self.direction == "Up"):
+            lastY -= 10
+        elif (self.direction == "Down"):
+            lastY += 10
+        
+        # Returns new corrdinates as a tuple
+        return (lastX,lastY)
+
 
 
     def isGameOver(self, snakeCoordinates) -> None:
