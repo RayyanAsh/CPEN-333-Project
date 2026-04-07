@@ -160,7 +160,7 @@ class Game():
             and position) should be correctly updated.
         """
         NewSnakeCoordinates = self.calculateNewCoordinates()
-        #complete the method implementation below
+        
 
 
     def calculateNewCoordinates(self) -> tuple:
@@ -174,7 +174,7 @@ class Game():
         """
         lastX, lastY = self.snakeCoordinates[-1]        
 
-        # Condtional statements change values of X and Y coordinates based on the direction of movement
+        # Conditional statements change values of X and Y coordinates based on the direction of movement
         # X is positive to the right, and Y is postive downwards
 
         if (self.direction == "Left"):
@@ -200,7 +200,14 @@ class Game():
             field and also adds a "game_over" task to the queue. 
         """
         x, y = snakeCoordinates
-        #complete the method implementation below
+
+        # Conditional Statement terminates game when the x or y coordniates are out of bounds, or if the snake bites itself
+        if (x > WINDOW_WIDTH or x < 0 or y > WINDOW_HEIGHT or y < 0 or (x,y) in self.snakeCoordinates):
+            self.gameNotOver = False  #Game termination condition
+
+        #Pushing game termniation status to the queue
+        self.queue.put({"game_over":True})
+        
 
     def createNewPrey(self) -> None:
         """ 
@@ -214,7 +221,16 @@ class Game():
             away from the walls. 
         """
         THRESHOLD = 15   #sets how close prey can be to borders
-        #complete the method implementation below
+        
+        # Generating random coordinates for the prey
+        preyX, preyY = (random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10), random.randrange(THRESHOLD, WINDOW_HEIGHT - THRESHOLD, 10))
+
+        # Calculates the icon width using a constant PREY_ICON_WIDTH using the coordinates calculated 
+        self.preyCoordinates = (preyX- PREY_ICON_WIDTH, preyY - PREY_ICON_WIDTH, preyX + PREY_ICON_WIDTH, preyY + PREY_ICON_WIDTH)
+        
+        # Pushing the new icon coordinates to the queue
+        self.queue.put({"prey":self.preyCoordinates})
+        
 
 
 if __name__ == "__main__":
@@ -222,7 +238,8 @@ if __name__ == "__main__":
     WINDOW_WIDTH = 500           
     WINDOW_HEIGHT = 300 
     SNAKE_ICON_WIDTH = 15
-    #add the specified constant PREY_ICON_WIDTH here     
+    #add the specified constant PREY_ICON_WIDTH here  
+    PREY_ICON_WIDTH = 5
 
     BACKGROUND_COLOUR = "green"   #you may change this colour if you wish
     ICON_COLOUR = "yellow"        #you may change this colour if you wish
