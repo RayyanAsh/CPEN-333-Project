@@ -125,8 +125,11 @@ class Game():
             are generated.
         """
         SPEED = 0.15     #speed of snake updates (sec)
+
         while self.gameNotOver:
-            pass
+            self.move()         # Calls the move function every SPEED seconds
+            time.sleep(SPEED)   # Dealy as specified by SPEED
+
             
 
     def whenAnArrowKeyIsPressed(self, e) -> None:
@@ -160,7 +163,29 @@ class Game():
             and position) should be correctly updated.
         """
         NewSnakeCoordinates = self.calculateNewCoordinates()
+
+        #Checks whether the prey has been caught or not
+        if ((self.preyX,self.preyY) == NewSnakeCoordinates):
+
+            # Incrementing the score if prey is caught and lengthening the snake=
+            self.score += 1
+            self.snakeCoordinates.append(NewSnakeCoordinates)
+            
+            # Pushing the score to quqe and creating new prey
+            self.queue.put({"score":self.score})
+            self.createNewPrey()
+
+        # If the prey hasn't been caught, snake length remains the same, by adding new head coordinates and popping the tail
+        else:
+            self.snakeCoordinates.append(NewSnakeCoordinates)
+            self.snakeCoordinates.pop(0)
         
+        # Check to see if any of the game termination conditions have occurred
+        self.isGameOver(NewSnakeCoordinates)
+
+        # Push the move to the stack
+        self.queue.put({"move":self.snakeCoordinates})
+       
 
 
     def calculateNewCoordinates(self) -> tuple:
@@ -205,9 +230,9 @@ class Game():
         if (x > WINDOW_WIDTH or x < 0 or y > WINDOW_HEIGHT or y < 0 or (x,y) in self.snakeCoordinates):
             self.gameNotOver = False  #Game termination condition
 
-        #Pushing game termniation status to the queue
-        self.queue.put({"game_over":True})
-        
+            #Pushing game termniation status to the queue
+            self.queue.put({"game_over":True})
+            
 
     def createNewPrey(self) -> None:
         """ 
@@ -223,10 +248,10 @@ class Game():
         THRESHOLD = 15   #sets how close prey can be to borders
         
         # Generating random coordinates for the prey
-        preyX, preyY = (random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10), random.randrange(THRESHOLD, WINDOW_HEIGHT - THRESHOLD, 10))
+        self.preyX, self.preyY = (random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10), random.randrange(THRESHOLD, WINDOW_HEIGHT - THRESHOLD, 10))
 
         # Calculates the icon width using a constant PREY_ICON_WIDTH using the coordinates calculated 
-        self.preyCoordinates = (preyX- PREY_ICON_WIDTH, preyY - PREY_ICON_WIDTH, preyX + PREY_ICON_WIDTH, preyY + PREY_ICON_WIDTH)
+        self.preyCoordinates = (self.preyX- PREY_ICON_WIDTH, self.preyY - PREY_ICON_WIDTH, self.preyX + PREY_ICON_WIDTH, self.preyY + PREY_ICON_WIDTH)
         
         # Pushing the new icon coordinates to the queue
         self.queue.put({"prey":self.preyCoordinates})
