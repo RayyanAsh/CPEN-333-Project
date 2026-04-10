@@ -250,7 +250,7 @@ class Game():
         THRESHOLD = 15   #sets how close prey can be to borders
         
         # Generating random coordinates for the prey
-        self.preyX, self.preyY = (random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 10), random.randrange(THRESHOLD, WINDOW_HEIGHT - THRESHOLD, 10))
+        self.preyX, self.preyY = (random.randrange(THRESHOLD, WINDOW_WIDTH - THRESHOLD, 2 * PREY_ICON_WIDTH), random.randrange(THRESHOLD, WINDOW_HEIGHT - THRESHOLD, 2 * PREY_ICON_WIDTH))
 
         # Calculates the icon width using a constant PREY_ICON_WIDTH using the coordinates calculated 
         self.preyCoordinates = (self.preyX- PREY_ICON_WIDTH, self.preyY - PREY_ICON_WIDTH, self.preyX + PREY_ICON_WIDTH, self.preyY + PREY_ICON_WIDTH)
