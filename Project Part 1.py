@@ -1,5 +1,5 @@
 # Group#:B51
-# Student Names: Rayyan Ashar (24427353), Sasha Jatskevich (Student No. here)
+# Student Names: Rayyan Ashar (24427353), Sasha Jatskevich (66661851)
 
 """
     This program implements a variety of the snake 
